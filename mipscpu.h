@@ -26,6 +26,7 @@
 #define _MIPCPU_H
 
 #include <boost/cstdint.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 
 namespace tememu 
@@ -40,8 +41,8 @@ namespace tememu
         virtual ~MipsCPU ();
     
     private:
-        std::vector<uint32_t> _GPR, _FPR, _FCR;
-        uint32_t _HI, _LO, _PC, _FCSR;
+        boost::scoped_ptr< std::vector<boost::uint32_t> > _GPR, _FPR, _FCR;
+        boost::uint32_t _HI, _LO, _PC, _FCSR;
     };
     
 } // tememu

@@ -32,8 +32,8 @@ namespace tememu
     MipsCPU::MipsCPU()
         : _HI(0), _LO(0), _FCSR(0), _PC(0)
     {
-        _GPR.reserve(gpr_count);
-        _FPR.reserve(fpr_count);
-        _FCR.reserve(fcr_count);        
+        _GPR(new std::vector<boost::uint32_t>(gpr_count, 0));
+        _FPR(new std::vector<boost::uint32_t>(fpr_count, 0));
+        _FCR(new std::vector<boost::uint32_t>(fcr_count, 0));
     }
 } // tememu
