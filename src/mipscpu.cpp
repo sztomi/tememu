@@ -36,4 +36,8 @@ namespace tememu
         _FPR(new std::vector<boost::uint32_t>(fpr_count, 0));
         _FCR(new std::vector<boost::uint32_t>(fcr_count, 0));
     }
+
+    void MipsCPU::runDecodedInstr(boost::uint32_t opcode)
+    {
+    }
 } // tememu

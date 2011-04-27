@@ -37,8 +37,11 @@ namespace tememu
     class MipsCPU 
     {
     public:
-        MipsCPU ();
+        MipsCPU();
         virtual ~MipsCPU ();
+
+    private:
+        void runDecodedInstr(boost::uint32_t opcode);
     
     private:
         boost::scoped_ptr< std::vector<boost::uint32_t> > _GPR, _FPR, _FCR;
