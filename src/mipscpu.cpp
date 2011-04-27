@@ -32,9 +32,9 @@ namespace tememu
     MipsCPU::MipsCPU()
         : _HI(0), _LO(0), _FCSR(0), _PC(0)
     {
-        _GPR(new std::vector<boost::uint32_t>(gpr_count, 0));
-        _FPR(new std::vector<boost::uint32_t>(fpr_count, 0));
-        _FCR(new std::vector<boost::uint32_t>(fcr_count, 0));
+        _GPR.reset(new std::vector<boost::uint32_t>(gpr_count, 0));
+        _FPR.reset(new std::vector<boost::uint32_t>(fpr_count, 0));
+        _FCR.reset(new std::vector<boost::uint32_t>(fcr_count, 0));
     }
 
     void MipsCPU::runDecodedInstr(boost::uint32_t opcode)

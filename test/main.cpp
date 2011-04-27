@@ -23,7 +23,7 @@
  */
 
 #include <iostream>
-#include "mipscpu.h"
+#include "../src/mipscpu.h"
 
 int main(int argc, const char *argv[])
 {

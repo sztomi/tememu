@@ -38,13 +38,13 @@ namespace tememu
     {
     public:
         MipsCPU();
-        virtual ~MipsCPU ();
+        ~MipsCPU ();
 
     private:
         void runDecodedInstr(boost::uint32_t opcode);
     
     private:
-        boost::scoped_ptr< std::vector<boost::uint32_t> > _GPR, _FPR, _FCR;
+        boost::shared_ptr< std::vector<boost::uint32_t> > _GPR, _FPR, _FCR;
         boost::uint32_t _HI, _LO, _PC, _FCSR;
     };
     
