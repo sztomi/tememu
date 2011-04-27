@@ -1,1 +1,12 @@
 tememu == Tiny Embeddable MIPS Emulator
+
+I'll pretty this file up later. 
+
+
+# Building
+
+Use premake.
+
+# Build dependencies (as Ubuntu/Debian package names, you can probably copy-paste these to install them on these distros):
+
+libboost-dev 
