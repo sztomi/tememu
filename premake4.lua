@@ -1,8 +1,10 @@
--- this is a premake4 configuration file
+-- this is a premake4 script
 -- see http://industriousone.com/premake
 
 solution "tememu"
+    language "C++"
     configurations { "debug", "release" }
+    includedirs { "./thirdparty/include/" }
 
     configuration { "debug" }
         targetdir "build/debug"
@@ -11,7 +13,6 @@ solution "tememu"
         targetdir "build/release"
 
     project "test"
-        language "C++"
         kind     "ConsoleApp"
         files    { "./src/**.h", "./src/**.cpp", "./test/main.cpp" }
 
@@ -23,8 +24,7 @@ solution "tememu"
             defines { "NDEBUG", "RELEASE" }
             flags   { "Optimize" }
 
-    project "libtememu"
-        language "C++"
+    project "tememu"
         kind     "StaticLib"
         files    { "./src/**.h", "./src/**.cpp" }
 
