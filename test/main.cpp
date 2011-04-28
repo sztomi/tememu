@@ -26,11 +26,28 @@
 
 #include <bitset>
 #include <iostream>
+#include <fstream>
+#include <string>
+
 #include "../src/mipscpu.h"
 #include "../src/instruction.h"
 #include "gtest/gtest.h"
 
 typedef boost::int_fast32_t int32;
+
+inline void loadMipsBinDump(const std::string& fileName, boost::shared_ptr< std::vector<int32> > data)
+{
+    std::ifstream is(fileName.c_str(), std::ios::in | std::ios::binary);
+    std::vector<int32>* p = data.get();
+
+    int32 x = 0;
+
+    while (!is.eof())
+    {
+        is.read((char*)&x, sizeof(x));
+        if (is.good()) p->push_back(x);
+    }        
+}
 
 TEST(RInstruction, ExtractOpcode1)
 {
@@ -194,9 +211,11 @@ TEST(SimpleProgs, AddiAdd)
     boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
     tememu::MipsCPU cpu;
 
-    program.get()->push_back(0x2084000c);
-    program.get()->push_back(0x20a50004);
-    program.get()->push_back(0x00a43020);
+    std::vector<int32>* p = program.get();
+
+    p->push_back(0x2084000c);
+    p->push_back(0x20a50004);
+    p->push_back(0x00a43020);
 
     cpu.loadProgram(program);
 
@@ -207,3 +226,39 @@ TEST(SimpleProgs, AddiAdd)
     EXPECT_EQ(cpu.gprValue(6), 16);
 }
 
+TEST(SimpleProgs, AddiSubi)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    loadMipsBinDump("testmips/add_sub1.bin", program);
+
+    std::cout << "program size: " << program.get()->size() << "\n";
+
+    cpu.loadProgram(program);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(4), 12);
+    EXPECT_EQ(cpu.gprValue(5), 4);
+    EXPECT_EQ(cpu.gprValue(6), 8);
+}
+
+TEST(SimpleProgs, Divu1)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    loadMipsBinDump("testmips/divu.bin", program);
+
+    std::cout << "program size: " << program.get()->size() << "\n";
+
+    cpu.loadProgram(program);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(4), 12);
+    EXPECT_EQ(cpu.gprValue(5), 4);
+    EXPECT_EQ(cpu.hi(), 0);
+    EXPECT_EQ(cpu.lo(), 3);
+}

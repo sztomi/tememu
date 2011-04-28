@@ -57,10 +57,19 @@ namespace tememu
         void loadProgram(boost::shared_ptr< std::vector<int32> >);
         void runProgram();
         int32 gprValue(int index) const { return _GPR[index]; }
+        int32 hi() const { return _HI; }
+        int32 lo() const { return _LO; }
 
     private:
         void op_add(int32);
         void op_addi(int32);
+        void op_addu(int32);
+        void op_addiu(int32);
+        void op_sub(int32);
+        void op_subu(int32);
+        void op_mult(int32);
+        void op_div(int32);
+        void op_divu(int32);
     
     private:
         std::vector<int32> _GPR, _FPR, _FCR;

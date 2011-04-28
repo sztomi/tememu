@@ -47,7 +47,14 @@ namespace tememu
         // see runDecodedInstr for the construction of the constants
 
         REG_OP_FUNC(op_add,     0x20 << 4);
+        REG_OP_FUNC(op_addu,    0x21 << 4);
+        REG_OP_FUNC(op_sub,     0x22 << 4);
+        REG_OP_FUNC(op_subu,    0x23 << 4);
         REG_OP_FUNC(op_addi,    0x8);
+        REG_OP_FUNC(op_addiu,   0x9);
+        REG_OP_FUNC(op_mult,    0x18 << 4);
+        REG_OP_FUNC(op_div,     0x1A << 4);
+        REG_OP_FUNC(op_divu,    0x1B << 4);
     }
 
     /**
@@ -102,10 +109,62 @@ namespace tememu
         step();
     }
 
+    void MipsCPU::op_addu(int32 instr)
+    {
+        RInstruction i(instr);
+        _GPR[i.rd] = (boost::uint32_t)(_GPR[i.rs]) + (boost::uint32_t)(_GPR[i.rt]);
+        step();
+    }
+
     void MipsCPU::op_addi(int32 instr)
     {
         IInstruction i(instr);
         _GPR[i.rt] = _GPR[i.rs] + i.immediate;
+        step();
+    }
+
+    void MipsCPU::op_addiu(int32 instr)
+    {
+        IInstruction i(instr);
+        _GPR[i.rt] = _GPR[i.rs] + i.immediate;
+        step();
+    }
+
+    void MipsCPU::op_sub(int32 instr)
+    {
+        RInstruction i(instr);
+        _GPR[i.rd] = _GPR[i.rs] - _GPR[i.rt];
+        step();
+    }
+
+    void MipsCPU::op_subu(int32 instr)
+    {
+        RInstruction i(instr);
+        _GPR[i.rd] = (boost::uint32_t)(_GPR[i.rs]) - (boost::uint32_t)(_GPR[i.rt]);
+        step();
+    }
+
+    void MipsCPU::op_mult(int32 instr)
+    {
+        RInstruction i(instr);
+        _LO = ((_GPR[i.rt] * _GPR[i.rs]) << 16) >> 16;
+        _HI = (_GPR[i.rt] * _GPR[i.rs]) << 16;
+        step();
+    }
+
+    void MipsCPU::op_div(int32 instr)
+    {
+        RInstruction i(instr);
+        _LO = _GPR[i.rs] / _GPR[i.rt];
+        _HI = _GPR[i.rs] % _GPR[i.rt];
+        step();
+    }
+
+    void MipsCPU::op_divu(int32 instr)
+    {
+        RInstruction i(instr);
+        _LO = _GPR[i.rs] / _GPR[i.rt];
+        _HI = _GPR[i.rs] % _GPR[i.rt];
         step();
     }
 
