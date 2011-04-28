@@ -98,3 +98,28 @@ TEST(RInstruction, ExtractFunct2)
     EXPECT_EQ(inst.funct, 0x21);
 }
 
+TEST(IInstruction, ExtractOpcode1)
+{
+    tememu::IInstruction inst(0xffffffff);
+    EXPECT_EQ(inst.opcode, 63);
+}
+
+TEST(IInstruction, ExtractRs1)
+{
+    tememu::IInstruction inst(0xffffffff);
+    EXPECT_EQ(inst.rs, 31);
+}
+
+TEST(IInstruction, ExtractRd1)
+{
+    tememu::IInstruction inst(0xffffffff);
+    EXPECT_EQ(inst.rt, 31);
+}
+
+TEST(IInstruction, ExtractImmediate1)
+{
+    tememu::IInstruction inst(0xffffffff);
+    EXPECT_EQ(inst.immediate, 255);
+}
+
+

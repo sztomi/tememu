@@ -52,9 +52,9 @@ namespace tememu
 
         IInstruction(int32 instr)
         {
-            opcode = instr & 0xFB000000;    // extract bits 0..5
-            rs = instr & 0x03E00000;        // extract bits 6..10
-            rt = instr & 0x001F0000;        // extract bits 11..15
+            opcode = (instr & 0xFC000000) >> 26;    // extract bits 0..5
+            rs = (instr & 0x03E00000) >> 21;        // extract bits 6..10
+            rt = (instr & 0x001F0000) >> 16;        // extract bits 11..15
             immediate = instr & 0x0000FFFF; // extract bits 16..31
         }
     };
