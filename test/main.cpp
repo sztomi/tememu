@@ -175,3 +175,16 @@ TEST(JInstruction, ExtractAddress3)
     tememu::JInstruction inst(0x08100006);
     EXPECT_EQ(inst.address, 0x00400018);
 }
+
+TEST(SimpleProgs, Addi1)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    program.get()->push_back(0x2084000c);
+    cpu.loadProgram(program);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(4), 12);
+}

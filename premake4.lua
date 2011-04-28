@@ -9,6 +9,7 @@ solution "tememu"
 
     configuration { "debug" }
         targetdir "build/debug"
+        defines { "DEBUG", "TRACE_OPCODES" }
 
     configuration { "release" }
         targetdir "build/release"
@@ -19,7 +20,6 @@ solution "tememu"
         links { "gtest", "gtest_main", "pthread" }
 
         configuration { "debug" }
-            defines { "_DEBUG" }
             flags   { "Symbols" }
 
         configuration { "release" }
@@ -31,7 +31,6 @@ solution "tememu"
         files    { "./src/**.h", "./src/**.cpp" }
 
         configuration { "debug" }
-            defines { "_DEBUG" }
             flags   { "Symbols" }
 
         configuration { "release" }

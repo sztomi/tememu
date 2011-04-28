@@ -30,8 +30,10 @@
 
 namespace tememu 
 {
+    #define REG_OP_FUNC(fn,code) this->_fnMap[(code)] = (&tememu::MipsCPU::fn)
+
     MipsCPU::MipsCPU()
-        : _HI(0), _LO(0), _PC(0), _nPC(0), _FCSR(0)
+        : _HI(0), _LO(0), _PC(4), _nPC(0), _FCSR(0)
     {
         _GPR.reserve(gpr_count); 
         _FPR.reserve(fpr_count);
@@ -44,7 +46,8 @@ namespace tememu
         // set up instruction table
         // see runDecodedInstr for the construction of the constants
 
-        _fnMap[0x00000020] = &tememu::MipsCPU::op_add;
+        REG_OP_FUNC(op_add,     0x20 << 4);
+        REG_OP_FUNC(op_addi,    0x8);
     }
 
     /**
@@ -54,11 +57,36 @@ namespace tememu
      */
     void MipsCPU::runDecodedInstr(int32 instr)
     {
-        int32 opcode = (instr & 0x03fffffff) >> 20;
-        int32 func = instr & 0x0000003F;
-        int32 internal_opcode = opcode | func;
+        int32 opcode = (instr & 0x03fffffff) >> 26;
+        int32 internal_opcode = 0, func = 0; 
 
-        CALL_MEMBER(this, _fnMap[internal_opcode])(instr);
+        if (opcode == 0)
+        {
+            func = instr & 0x0000003F;
+            internal_opcode = func << 4;
+        }
+        else
+        {
+            internal_opcode = opcode; 
+        }
+
+#if defined(DEBUG) && defined(TRACE_OPCODES)
+        std::cout << "opcode = " << opcode << ", func = " << func << ", internal_opcode = " << internal_opcode << "\n";
+#endif
+
+        boost::unordered_map<int32, OpcodeFn>::iterator it = _fnMap.find(internal_opcode);
+
+        if (it != _fnMap.end())
+        {
+            CALL_MEMBER(this, (*it).second)(instr);
+        }
+        else
+        {
+#ifdef DEBUG
+            std::cout << "Unknown internal_opcode: " << internal_opcode << "\n"; 
+#endif
+            step();
+        }
     }
 
     void MipsCPU::advance_pc(int32 offset)
@@ -69,6 +97,29 @@ namespace tememu
 
     void MipsCPU::op_add(int32 instr)
     {
-
+        RInstruction i(instr);
+        _GPR[i.rd] = _GPR[i.rs] + _GPR[i.rt];
+        step();
     }
+
+    void MipsCPU::op_addi(int32 instr)
+    {
+        IInstruction i(instr);
+        _GPR[i.rt] = _GPR[i.rs] + i.immediate;
+        step();
+    }
+
+    void MipsCPU::loadProgram(boost::shared_ptr< std::vector<int32> > program)
+    {
+        _program = program;
+    }
+
+    void MipsCPU::runProgram()
+    {
+        std::vector<int32>* p = _program.get();
+
+        while (_PC / 4 - 1 < p->size())
+            runDecodedInstr(p->at(_PC / 4 - 1));
+    }
+
 } // tememu

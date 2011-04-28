@@ -46,17 +46,25 @@ namespace tememu
 
     public:
         MipsCPU();
-        ~MipsCPU();
+        ~MipsCPU() {}
 
     private:
         void runDecodedInstr(int32 instr);
         void advance_pc(int32 offset);
+        void step() { advance_pc(sizeof(int32)); }
+
+    public:
+        void loadProgram(boost::shared_ptr< std::vector<int32> >);
+        void runProgram();
+        int32 gprValue(int index) const { return _GPR[index]; }
 
     private:
         void op_add(int32);
+        void op_addi(int32);
     
     private:
         std::vector<int32> _GPR, _FPR, _FCR;
+        boost::shared_ptr< std::vector<int32> > _program;
         boost::unordered_map<int32, OpcodeFn> _fnMap;
         int32 _HI, _LO, _PC, _nPC, _FCSR;
     };
