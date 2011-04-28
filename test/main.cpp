@@ -188,3 +188,22 @@ TEST(SimpleProgs, Addi1)
 
     EXPECT_EQ(cpu.gprValue(4), 12);
 }
+
+TEST(SimpleProgs, AddiAdd)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    program.get()->push_back(0x2084000c);
+    program.get()->push_back(0x20a50004);
+    program.get()->push_back(0x00a43020);
+
+    cpu.loadProgram(program);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(4), 12);
+    EXPECT_EQ(cpu.gprValue(5), 4);
+    EXPECT_EQ(cpu.gprValue(6), 16);
+}
+

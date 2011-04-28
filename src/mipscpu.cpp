@@ -33,7 +33,7 @@ namespace tememu
     #define REG_OP_FUNC(fn,code) this->_fnMap[(code)] = (&tememu::MipsCPU::fn)
 
     MipsCPU::MipsCPU()
-        : _HI(0), _LO(0), _PC(4), _nPC(0), _FCSR(0)
+        : _HI(0), _LO(0), _PC(4), _nPC(4), _FCSR(0)
     {
         _GPR.reserve(gpr_count); 
         _FPR.reserve(fpr_count);
@@ -118,8 +118,8 @@ namespace tememu
     {
         std::vector<int32>* p = _program.get();
 
-        while (_PC / 4 - 1 < p->size())
-            runDecodedInstr(p->at(_PC / 4 - 1));
+        while (_nPC / 4 - 1 < p->size())
+            runDecodedInstr(p->at(_nPC / 4 - 1));
     }
 
 } // tememu
