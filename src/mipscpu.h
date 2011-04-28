@@ -22,8 +22,8 @@
  *    THE SOFTWARE.
  */
 
-#ifndef _MIPCPU_H
-#define _MIPCPU_H
+#ifndef _MIPSCPU_H
+#define _MIPSCPU_H
 
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>

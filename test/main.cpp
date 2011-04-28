@@ -21,12 +21,11 @@
  *    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *    THE SOFTWARE.
  */
-
 #include <iostream>
 #include "../src/mipscpu.h"
+#include "gtest/gtest.h"
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
-    std::cout << "hello";
     return 0;
 }
