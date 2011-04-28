@@ -37,11 +37,11 @@ namespace tememu
 
         RInstruction(int32 instr) 
         {
-            opcode = (instr & 0xFB000000) >> 26;    // extract bits 0..5
-            rs = (instr & 0x03E00000);        // extract bits 6..10
-            rt = instr & 0x001F0000;        // extract bits 11..15
-            rd = instr & 0x0000F800;        // extract bits 16..20
-            shamt = instr & 0x000007B0;     // extract bits 21..25
+            opcode = (instr & 0xFC000000) >> 26;    // extract bits 0..5
+            rs = (instr & 0x03E00000) >> 21;        // extract bits 6..10
+            rt = (instr & 0x001F0000) >> 16;        // extract bits 11..15
+            rd = (instr & 0x0000F800) >> 11;        // extract bits 16..20
+            shamt = (instr & 0x000001F0) >> 4;     // extract bits 21..25
             funct = instr & 0x0000003F;     // extract bits 26..31
         }
     };

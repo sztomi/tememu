@@ -21,18 +21,80 @@
  *    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *    THE SOFTWARE.
  */
+
+#include <boost/cstdint.hpp>
+
+#include <bitset>
 #include <iostream>
 #include "../src/mipscpu.h"
 #include "../src/instruction.h"
 #include "gtest/gtest.h"
 
-TEST(DecodeTest, RInstruction1)
+typedef boost::int_fast32_t int32;
+
+TEST(RInstruction, ExtractOpcode1)
 {
     tememu::RInstruction inst(0xFFFFFFFF);
-    EXPECT_EQ(inst.opcode, 0xFB);
-    EXPECT_EQ(inst.rs, 0x3E);
-    EXPECT_EQ(inst.rt, 0x1F);
-    EXPECT_EQ(inst.rd, 0xF8);
-    EXPECT_EQ(inst.shamt, 0x7B);
-    EXPECT_EQ(inst.funct, 0x3F);
+    EXPECT_EQ(inst.opcode, 63);
 }
+
+TEST(RInstruction, ExtractRs1)
+{
+    tememu::RInstruction inst(0xFFFFFFFF);
+    EXPECT_EQ(inst.rs, 31);
+}
+
+TEST(RInstruction, ExtractRt1)
+{
+    tememu::RInstruction inst(0xFFFFFFFF);
+    EXPECT_EQ(inst.rt, 31);
+}
+
+TEST(RInstruction, ExtractRd1)
+{
+    tememu::RInstruction inst(0xFFFFFFFF);
+    EXPECT_EQ(inst.rd, 31);
+}
+
+TEST(RInstruction, ExtractShamt1)
+{
+    tememu::RInstruction inst(0xFFFFFFFF);
+    EXPECT_EQ(inst.shamt, 31);
+}
+
+TEST(RInstruction, ExtractFunct1)
+{
+    tememu::RInstruction inst(0xFFFFFFFF);
+    EXPECT_EQ(inst.funct, 63);
+}
+
+TEST(RInstruction, ExtractOpcode2)
+{
+    tememu::RInstruction inst(0x0399e021);
+    EXPECT_EQ(inst.opcode, 0);
+}
+
+TEST(RInstruction, ExtractRs2)
+{
+    tememu::RInstruction inst(0x0399e021);
+    EXPECT_EQ(inst.rs, 28);
+}
+
+TEST(RInstruction, ExtractRt2)
+{
+    tememu::RInstruction inst(0x0399e021);
+    EXPECT_EQ(inst.rt, 25);
+}
+
+TEST(RInstruction, ExtractRd2)
+{
+    tememu::RInstruction inst(0x0399e021);
+    EXPECT_EQ(inst.rd, 28);
+}
+
+TEST(RInstruction, ExtractFunct2)
+{
+    tememu::RInstruction inst(0x0399e021);
+    EXPECT_EQ(inst.funct, 0x21);
+}
+
