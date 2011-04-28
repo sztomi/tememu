@@ -27,28 +27,38 @@
 
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
 
+#include <map>
 #include <vector>
 
-#include "FastDelegate.h"
+#define CALL_MEMBER(obj,fn) ((obj)->*(fn))
 
 namespace tememu 
 {
+    typedef boost::int_fast32_t int32;
     /**
      * @brief Maintains the state of the MIPS CPU
      */
     class MipsCPU 
     {
+        typedef void (MipsCPU::*OpcodeFn)(int32);
+
     public:
         MipsCPU();
-        ~MipsCPU ();
+        ~MipsCPU();
 
     private:
-        void runDecodedInstr(boost::uint32_t opcode);
+        void runDecodedInstr(int32 instr);
+        void advance_pc(int32 offset);
+
+    private:
+        void op_add(int32);
     
     private:
-        boost::shared_ptr< std::vector<boost::uint32_t> > _GPR, _FPR, _FCR;
-        boost::uint32_t _HI, _LO, _PC, _FCSR;
+        std::vector<int32> _GPR, _FPR, _FCR;
+        boost::unordered_map<int32, OpcodeFn> _fnMap;
+        int32 _HI, _LO, _PC, _nPC, _FCSR;
     };
     
 } // tememu

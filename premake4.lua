@@ -16,7 +16,7 @@ solution "tememu"
     project "test"
         kind     "ConsoleApp"
         files    { "./src/**.h", "./src/**.cpp", "./test/main.cpp" }
-        links { "gtest", "gtest_main" }
+        links { "gtest", "gtest_main", "pthread" }
 
         configuration { "debug" }
             defines { "_DEBUG" }

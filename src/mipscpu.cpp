@@ -22,22 +22,53 @@
  *    THE SOFTWARE.
  */
  
-#include "mipscpu.h"
 #include "consts.h"
+#include "instruction.h"
+#include "mipscpu.h"
 
 #include <iostream>
 
 namespace tememu 
 {
     MipsCPU::MipsCPU()
-        : _HI(0), _LO(0), _FCSR(0), _PC(0)
+        : _HI(0), _LO(0), _PC(0), _nPC(0), _FCSR(0)
     {
-        _GPR.reset(new std::vector<boost::uint32_t>(gpr_count, 0));
-        _FPR.reset(new std::vector<boost::uint32_t>(fpr_count, 0));
-        _FCR.reset(new std::vector<boost::uint32_t>(fcr_count, 0));
+        _GPR.reserve(gpr_count); 
+        _FPR.reserve(fpr_count);
+        _FCR.reserve(fcr_count);
+
+        for ( int i = 0; i < gpr_count; ++i ) _GPR.push_back(0);
+        for ( int i = 0; i < fpr_count; ++i ) _FPR.push_back(0);
+        for ( int i = 0; i < fcr_count; ++i ) _FCR.push_back(0);
+
+        // set up instruction table
+        // see runDecodedInstr for the construction of the constants
+
+        _fnMap[0x00000020] = &tememu::MipsCPU::op_add;
     }
 
-    void MipsCPU::runDecodedInstr(boost::uint32_t opcode)
+    /**
+     * @brief Extracts the internal opcode for the function and dispatches the call.
+     *
+     * @param instr The raw instruction.
+     */
+    void MipsCPU::runDecodedInstr(int32 instr)
     {
+        int32 opcode = (instr & 0x03fffffff) >> 20;
+        int32 func = instr & 0x0000003F;
+        int32 internal_opcode = opcode | func;
+
+        CALL_MEMBER(this, _fnMap[internal_opcode])(instr);
+    }
+
+    void MipsCPU::advance_pc(int32 offset)
+    {
+        _PC = _nPC;
+        _nPC += offset;
+    }
+
+    void MipsCPU::op_add(int32 instr)
+    {
+
     }
 } // tememu

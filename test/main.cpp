@@ -23,9 +23,16 @@
  */
 #include <iostream>
 #include "../src/mipscpu.h"
+#include "../src/instruction.h"
 #include "gtest/gtest.h"
 
-int main(int argc, char *argv[])
+TEST(DecodeTest, RInstruction1)
 {
-    return 0;
+    tememu::RInstruction inst(0xFFFFFFFF);
+    EXPECT_EQ(inst.opcode, 0xFB);
+    EXPECT_EQ(inst.rs, 0x3E);
+    EXPECT_EQ(inst.rt, 0x1F);
+    EXPECT_EQ(inst.rd, 0xF8);
+    EXPECT_EQ(inst.shamt, 0x7B);
+    EXPECT_EQ(inst.funct, 0x3F);
 }
