@@ -119,7 +119,59 @@ TEST(IInstruction, ExtractRd1)
 TEST(IInstruction, ExtractImmediate1)
 {
     tememu::IInstruction inst(0xffffffff);
-    EXPECT_EQ(inst.immediate, 255);
+    EXPECT_EQ(inst.immediate, 0xffff);
 }
 
+TEST(IInstruction, ExtractOpcode2)
+{
+    tememu::IInstruction inst(0x24625bfa);
+    EXPECT_EQ(inst.opcode, 0x9);
+}
 
+TEST(IInstruction, ExtractRs2)
+{
+    tememu::IInstruction inst(0x24625bfa);
+    EXPECT_EQ(inst.rs, 3);
+}
+
+TEST(IInstruction, ExtractRd2)
+{
+    tememu::IInstruction inst(0x24625bfa);
+    EXPECT_EQ(inst.rt, 2);
+}
+
+TEST(IInstruction, ExtractImmediate2)
+{
+    tememu::IInstruction inst(0x24625bfa);
+    EXPECT_EQ(inst.immediate, 23546);
+}
+
+TEST(JInstruction, ExtractOpcode1)
+{
+    tememu::JInstruction inst(0xffffffff);
+    EXPECT_EQ(inst.opcode, 63);
+}
+
+TEST(JInstruction, ExtractAddress1)
+{
+    tememu::JInstruction inst(0xffffffff);
+    EXPECT_EQ(inst.address, 67108863 << 2);
+}
+
+TEST(JInstruction, ExtractOpcode2)
+{
+    tememu::JInstruction inst(0x08100002);
+    EXPECT_EQ(inst.opcode, 2);
+}
+
+TEST(JInstruction, ExtractAddress2)
+{
+    tememu::JInstruction inst(0x08100002);
+    EXPECT_EQ(inst.address, 0x00400008);
+}
+
+TEST(JInstruction, ExtractAddress3)
+{
+    tememu::JInstruction inst(0x08100006);
+    EXPECT_EQ(inst.address, 0x00400018);
+}

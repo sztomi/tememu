@@ -65,8 +65,8 @@ namespace tememu
 
         JInstruction(int32 instr)
         {
-            opcode = instr & 0xFB000000;     // extract bits 0..5
-            address = instr & ~(0xFB000000); // extract bits 6..31
+            opcode = (instr & 0xFC000000) >> 26;    // extract bits 0..5
+            address = (instr & 0x03ffffff) << 2; // extract bits 6..31
         }
     };
 }
