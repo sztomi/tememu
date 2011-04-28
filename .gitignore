@@ -1,0 +1,9 @@
+a.out
+*.un~
+*.swp
+tags
+build/*
+Makefile
+*.make
+obj/*
+thirdparty/lib/*
