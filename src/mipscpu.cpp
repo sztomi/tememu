@@ -55,6 +55,8 @@ namespace tememu
         REG_OP_FUNC(op_mult,    0x18 << 4);
         REG_OP_FUNC(op_div,     0x1A << 4);
         REG_OP_FUNC(op_divu,    0x1B << 4);
+
+        REG_OP_FUNC(op_beq,     0x04);
     }
 
     /**
@@ -166,6 +168,19 @@ namespace tememu
         _LO = _GPR[i.rs] / _GPR[i.rt];
         _HI = _GPR[i.rs] % _GPR[i.rt];
         step();
+    }
+
+    void MipsCPU::op_beq(int32 instr)
+    {
+        IInstruction i(instr);
+        if (_GPR[i.rs] == _GPR[i.rt])
+        {
+            advance_pc(4 + 4 * i.immediate);
+        }
+        else
+        {
+            step();
+        }
     }
 
     void MipsCPU::loadProgram(boost::shared_ptr< std::vector<int32> > program)

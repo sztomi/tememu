@@ -61,6 +61,7 @@ namespace tememu
         int32 lo() const { return _LO; }
 
     private:
+        // arithmetic instructions
         void op_add(int32);
         void op_addi(int32);
         void op_addu(int32);
@@ -70,6 +71,13 @@ namespace tememu
         void op_mult(int32);
         void op_div(int32);
         void op_divu(int32);
+
+        // branching and jumping
+        void op_beq(int32);
+        void op_bne(int32);
+        void op_j(int32);
+        void op_jr(int32);
+        void op_jal(int32);
     
     private:
         std::vector<int32> _GPR, _FPR, _FCR;
