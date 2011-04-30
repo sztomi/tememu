@@ -45,6 +45,7 @@ namespace tememu
 
         // set up instruction table
         // see runDecodedInstr for the construction of the constants
+        // R instructions internal opcodes = funct << 4.
 
         REG_OP_FUNC(op_add,     0x20 << 4);
         REG_OP_FUNC(op_addu,    0x21 << 4);
@@ -57,6 +58,10 @@ namespace tememu
         REG_OP_FUNC(op_divu,    0x1B << 4);
 
         REG_OP_FUNC(op_beq,     0x04);
+        REG_OP_FUNC(op_bne,     0x05);
+        REG_OP_FUNC(op_j,       0x02);
+        REG_OP_FUNC(op_jal,     0x03);
+        REG_OP_FUNC(op_jr,      0x08 << 4);
     }
 
     /**
@@ -87,7 +92,7 @@ namespace tememu
 
         if (it != _fnMap.end())
         {
-            CALL_MEMBER(this, (*it).second)(instr);
+            CALL_MEMBER(this, it->second)(instr);
         }
         else
         {
@@ -175,12 +180,47 @@ namespace tememu
         IInstruction i(instr);
         if (_GPR[i.rs] == _GPR[i.rt])
         {
-            advance_pc(4 + 4 * i.immediate);
+            advance_pc(4 * i.immediate);
         }
         else
         {
             step();
         }
+    }
+
+    void MipsCPU::op_bne(int32 instr)
+    {
+        IInstruction i(instr);
+        if (_GPR[i.rs] != _GPR[i.rt])
+        {
+            advance_pc(4 * i.immediate);
+        }
+        else
+        {
+            step();
+        }
+    }
+
+    void MipsCPU::op_j(int32 instr)
+    {
+        JInstruction i(instr);
+        _PC = _nPC;
+        _nPC = (_PC & 0xf0000000) | i.address << 2;
+    }
+
+    void MipsCPU::op_jal(int32 instr)
+    {
+        JInstruction i(instr);
+        _GPR[31] = _nPC + 4; // return address is the next instruction from here
+        _PC = _nPC;
+        _nPC = (_PC & 0xf0000000) | i.address << 2;
+    }
+
+    void MipsCPU::op_jr(int32 instr)
+    {
+        RInstruction i(instr);
+        _PC = _nPC;
+        _nPC = i.rs;
     }
 
     void MipsCPU::loadProgram(boost::shared_ptr< std::vector<int32> > program)
