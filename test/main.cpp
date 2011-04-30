@@ -365,3 +365,21 @@ TEST(Jumping, op_beq_false)
     EXPECT_EQ(cpu.gprValue(5), 5);
 }
 
+TEST(Complex, fibonacci)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    loadMipsBinDump("testmips/fibo.bin", program);
+
+    cpu.loadProgram(program);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(4), 21);
+    EXPECT_EQ(cpu.gprValue(5), 34);
+    EXPECT_EQ(cpu.gprValue(6), 55);
+    EXPECT_EQ(cpu.hi(), 55);
+    EXPECT_EQ(cpu.lo(), 34);
+}
+

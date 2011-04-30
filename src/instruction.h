@@ -26,6 +26,7 @@
 #define _INSTRUCTION_H
 
 #include <boost/cstdint.hpp>
+#include <iostream>
 
 namespace tememu
 {
@@ -44,6 +45,11 @@ namespace tememu
             shamt = (instr & 0x000001F0) >> 4;     // extract bits 21..25
             funct = instr & 0x0000003F;     // extract bits 26..31
         }
+
+        void print()
+        {
+            std::cout << " [rs = " << rs << ", rt = " << rt << ", rd = " << rd << ", shamt = " << shamt << ", funct = " << funct << "\n";
+        }
     };
 
     struct IInstruction
@@ -56,6 +62,11 @@ namespace tememu
             rs = (instr & 0x03E00000) >> 21;        // extract bits 6..10
             rt = (instr & 0x001F0000) >> 16;        // extract bits 11..15
             immediate = instr & 0x0000FFFF; // extract bits 16..31
+        }
+
+        void print()
+        {
+            std::cout << " [rs = " << rs << ", rt = " << rt << ", immediate = " << std::hex << immediate << "\n";
         }
     };
     

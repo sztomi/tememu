@@ -30,7 +30,11 @@
 
 namespace tememu 
 {
+#ifndef TRACE_OPCODES
     #define REG_OP_FUNC(fn,code) this->_fnMap[(code)] = (&tememu::MipsCPU::fn)
+#else
+    #define REG_OP_FUNC(fn,code) this->_fnMap[(code)] = (&tememu::MipsCPU::fn); this->_opNameMap[(code)] = #fn
+#endif
 
     MipsCPU::MipsCPU()
         : _HI(0), _LO(0), _PC(4), _nPC(4), _FCSR(0)
@@ -62,6 +66,11 @@ namespace tememu
         REG_OP_FUNC(op_j,       0x02);
         REG_OP_FUNC(op_jal,     0x03);
         REG_OP_FUNC(op_jr,      0x08 << 4);
+
+        REG_OP_FUNC(op_mfhi,    0x10 << 4);
+        REG_OP_FUNC(op_mthi,    0x11 << 4);
+        REG_OP_FUNC(op_mflo,    0x12 << 4);
+        REG_OP_FUNC(op_mtlo,    0x13 << 4);
     }
 
     /**
@@ -85,7 +94,7 @@ namespace tememu
         }
 
 #if defined(DEBUG) && defined(TRACE_OPCODES)
-        std::cout << "opcode = " << opcode << ", func = " << func << ", internal_opcode = " << internal_opcode << "\n";
+        std::cout << _opNameMap[internal_opcode] << "\n";
 #endif
 
         boost::unordered_map<int32, OpcodeFn>::iterator it = _fnMap.find(internal_opcode);
@@ -119,7 +128,7 @@ namespace tememu
     void MipsCPU::op_addu(int32 instr)
     {
         RInstruction i(instr);
-        _GPR[i.rd] = (boost::uint32_t)(_GPR[i.rs]) + (boost::uint32_t)(_GPR[i.rt]);
+        _GPR[i.rd] = _GPR[i.rs] + _GPR[i.rt];
         step();
     }
 
@@ -191,9 +200,12 @@ namespace tememu
     void MipsCPU::op_bne(int32 instr)
     {
         IInstruction i(instr);
+        i.print();
+
         if (_GPR[i.rs] != _GPR[i.rt])
         {
-            advance_pc(4 + 4 * i.immediate);
+            std::cout << _GPR[i.rs] << "," << _GPR[i.rt] << "," << std::dec << (signed int)i.immediate << "\n";
+            advance_pc(4 + 4 * (signed int)i.immediate);
         }
         else
         {
@@ -221,6 +233,34 @@ namespace tememu
         RInstruction i(instr);
         _PC = _nPC;
         _nPC = _GPR[i.rs] + 4;
+    }
+
+    void MipsCPU::op_mfhi(int32 instr)
+    {
+        RInstruction i(instr);
+        _GPR[i.rd] = _HI;
+        step();
+    }
+
+    void MipsCPU::op_mflo(int32 instr)
+    {
+        RInstruction i(instr);
+        _GPR[i.rd] = _LO;
+        step();
+    }
+
+    void MipsCPU::op_mthi(int32 instr)
+    {
+        RInstruction i(instr);
+        _HI = _GPR[i.rs];
+        step();
+    }
+
+    void MipsCPU::op_mtlo(int32 instr)
+    {
+        RInstruction i(instr);
+        _LO = _GPR[i.rs];
+        step();
     }
 
     void MipsCPU::loadProgram(boost::shared_ptr< std::vector<int32> > program)

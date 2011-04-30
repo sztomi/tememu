@@ -30,6 +30,7 @@
 #include <boost/unordered_map.hpp>
 
 #include <map>
+#include <string>
 #include <vector>
 
 #define CALL_MEMBER(obj,fn) ((obj)->*(fn))
@@ -78,11 +79,20 @@ namespace tememu
         void op_j(int32);
         void op_jr(int32);
         void op_jal(int32);
+
+        // moving
+        void op_mfhi(int32);
+        void op_mflo(int32);
+        void op_mthi(int32);
+        void op_mtlo(int32);
     
     private:
         std::vector<int32> _GPR, _FPR, _FCR;
         boost::shared_ptr< std::vector<int32> > _program;
         boost::unordered_map<int32, OpcodeFn> _fnMap;
+#ifdef TRACE_OPCODES
+        boost::unordered_map<int32, std::string> _opNameMap;
+#endif
         int32 _HI, _LO, _PC, _nPC, _FCSR;
     };
     
