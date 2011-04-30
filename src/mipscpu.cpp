@@ -191,9 +191,6 @@ namespace tememu
     void MipsCPU::op_bne(int32 instr)
     {
         IInstruction i(instr);
-        std::cout << _GPR[i.rs] << "\n";
-        std::cout << _GPR[i.rt] << "\n";
-        std::cout << i.immediate << "\n";
         if (_GPR[i.rs] != _GPR[i.rt])
         {
             advance_pc(4 + 4 * i.immediate);
