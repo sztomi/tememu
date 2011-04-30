@@ -303,5 +303,19 @@ TEST(Jumping, op_jr)
 
     EXPECT_EQ(cpu.gprValue(4), 12);
     EXPECT_EQ(cpu.gprValue(5), 10);
+}
 
+TEST(Jumping, op_bne_true)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    loadMipsBinDump("testmips/op_bne_true.bin", program);
+
+    cpu.loadProgram(program);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(4), 10);
+    EXPECT_EQ(cpu.gprValue(5), 5);
 }
