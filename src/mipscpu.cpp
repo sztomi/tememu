@@ -180,7 +180,7 @@ namespace tememu
         IInstruction i(instr);
         if (_GPR[i.rs] == _GPR[i.rt])
         {
-            advance_pc(4 * i.immediate);
+            advance_pc(4 + 4 * i.immediate);
         }
         else
         {

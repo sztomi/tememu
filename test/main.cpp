@@ -335,3 +335,33 @@ TEST(Jumping, op_bne_false)
     EXPECT_EQ(cpu.gprValue(5), 5);
 }
 
+TEST(Jumping, op_beq_true)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    loadMipsBinDump("testmips/op_beq_true.bin", program);
+
+    cpu.loadProgram(program);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(4), 5);
+    EXPECT_EQ(cpu.gprValue(5), 5);
+}
+
+TEST(Jumping, op_beq_false)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    loadMipsBinDump("testmips/op_beq_false.bin", program);
+
+    cpu.loadProgram(program);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(4), 10);
+    EXPECT_EQ(cpu.gprValue(5), 5);
+}
+
