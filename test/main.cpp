@@ -233,8 +233,6 @@ TEST(SimpleProgs, AddiSubi)
 
     loadMipsBinDump("testmips/add_sub1.bin", program);
 
-    std::cout << "program size: " << program.get()->size() << "\n";
-
     cpu.loadProgram(program);
 
     cpu.runProgram();
@@ -251,8 +249,6 @@ TEST(SimpleProgs, Divu1)
 
     loadMipsBinDump("testmips/divu.bin", program);
 
-    std::cout << "program size: " << program.get()->size() << "\n";
-
     cpu.loadProgram(program);
 
     cpu.runProgram();
@@ -261,4 +257,19 @@ TEST(SimpleProgs, Divu1)
     EXPECT_EQ(cpu.gprValue(5), 4);
     EXPECT_EQ(cpu.hi(), 0);
     EXPECT_EQ(cpu.lo(), 3);
+}
+
+TEST(Jumping, op_j)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    loadMipsBinDump("testmips/op_j.bin", program);
+
+    cpu.loadProgram(program);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(4), 20);
+
 }

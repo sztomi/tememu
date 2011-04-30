@@ -198,14 +198,14 @@ namespace tememu
         else
         {
             step();
-        }
+        }   
     }
 
     void MipsCPU::op_j(int32 instr)
     {
         JInstruction i(instr);
         _PC = _nPC;
-        _nPC = (_PC & 0xf0000000) | i.address << 2;
+        _nPC = (_PC & 0xf0000000) | i.address + 4;
     }
 
     void MipsCPU::op_jal(int32 instr)
@@ -213,7 +213,7 @@ namespace tememu
         JInstruction i(instr);
         _GPR[31] = _nPC + 4; // return address is the next instruction from here
         _PC = _nPC;
-        _nPC = (_PC & 0xf0000000) | i.address << 2;
+        _nPC = (_PC & 0xf0000000) | i.address + 4;
     }
 
     void MipsCPU::op_jr(int32 instr)
