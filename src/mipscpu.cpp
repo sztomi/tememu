@@ -45,14 +45,14 @@ namespace tememu
 
         // set up instruction table
         // see runDecodedInstr for the construction of the constants
-        // R instructions internal opcodes = funct << 4.
+        // 0 opcode instructions internal opcodes = funct << 4.
 
         REG_OP_FUNC(op_add,     0x20 << 4);
         REG_OP_FUNC(op_addu,    0x21 << 4);
         REG_OP_FUNC(op_sub,     0x22 << 4);
         REG_OP_FUNC(op_subu,    0x23 << 4);
-        REG_OP_FUNC(op_addi,    0x8);
-        REG_OP_FUNC(op_addiu,   0x9);
+        REG_OP_FUNC(op_addi,    0x08);
+        REG_OP_FUNC(op_addiu,   0x09);
         REG_OP_FUNC(op_mult,    0x18 << 4);
         REG_OP_FUNC(op_div,     0x1A << 4);
         REG_OP_FUNC(op_divu,    0x1B << 4);
@@ -220,7 +220,7 @@ namespace tememu
     {
         RInstruction i(instr);
         _PC = _nPC;
-        _nPC = i.rs;
+        _nPC = _GPR[i.rs] + 4;
     }
 
     void MipsCPU::loadProgram(boost::shared_ptr< std::vector<int32> > program)
