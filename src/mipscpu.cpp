@@ -26,6 +26,7 @@
 #include "instruction.h"
 #include "mipscpu.h"
 
+#include <cstring>
 #include <iostream>
 
 namespace tememu 
@@ -116,6 +117,7 @@ namespace tememu
     {
         _PC = _nPC;
         _nPC += offset;
+        std::cout << "----nPC = " << _nPC << "\n";
     }
 
     void MipsCPU::op_add(int32 instr)
@@ -135,7 +137,11 @@ namespace tememu
     void MipsCPU::op_addi(int32 instr)
     {
         IInstruction i(instr);
-        _GPR[i.rt] = _GPR[i.rs] + i.immediate;
+        
+        short svalue;
+        memcpy(&svalue, &(i.immediate), sizeof(svalue));
+
+        _GPR[i.rt] = _GPR[i.rs] + svalue;
         step();
     }
 
@@ -200,12 +206,13 @@ namespace tememu
     void MipsCPU::op_bne(int32 instr)
     {
         IInstruction i(instr);
-        i.print();
+
+        short svalue;
+        memcpy(&svalue, &(i.immediate), sizeof(svalue));
 
         if (_GPR[i.rs] != _GPR[i.rt])
         {
-            std::cout << _GPR[i.rs] << "," << _GPR[i.rt] << "," << std::dec << (signed int)i.immediate << "\n";
-            advance_pc(4 + 4 * (signed int)i.immediate);
+            advance_pc(svalue * 4);
         }
         else
         {
