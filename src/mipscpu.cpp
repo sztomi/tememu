@@ -211,7 +211,7 @@ namespace tememu
     void MipsCPU::op_jal(int32 instr)
     {
         JInstruction i(instr);
-        _GPR[31] = _nPC + 4; // return address is the next instruction from here
+        _GPR[31] = _PC + 4; // return address is the next instruction from here
         _PC = _nPC;
         _nPC = (_PC & 0xf0000000) | i.address + 4;
     }
