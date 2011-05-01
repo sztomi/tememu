@@ -9,7 +9,7 @@ solution "tememu"
 
     configuration { "debug" }
         targetdir "build/debug"
-        defines { "DEBUG", "TRACE_OPCODES" }
+        defines { "DEBUG" }
 
     configuration { "release" }
         targetdir "build/release"

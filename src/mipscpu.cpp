@@ -29,6 +29,7 @@
 #include <cstring>
 #include <iostream>
 
+
 namespace tememu 
 {
 #ifndef TRACE_OPCODES
@@ -79,6 +80,8 @@ namespace tememu
         for ( int i = 0; i < gpr_count; ++i ) _GPR[i] = 0;
         for ( int i = 0; i < fpr_count; ++i ) _FPR[i] = 0;
         for ( int i = 0; i < fcr_count; ++i ) _FCR[i] = 0;
+        _HI = _LO = _FCSR = 0;
+        _nPC = _PC = 4;
     }
 
     /**

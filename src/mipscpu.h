@@ -60,6 +60,7 @@ namespace tememu
         void runProgram();
         void reset();
         int32 gprValue(int index) const { return _GPR[index]; }
+        void setGPR(int index, int32 value) { _GPR[index] = value; } // range checking?
         int32 hi() const { return _HI; }
         int32 lo() const { return _LO; }
 

@@ -399,3 +399,68 @@ TEST(Complex, fibonacci)
     EXPECT_EQ(cpu.lo(), 34);
 }
 
+TEST(Complex, fibonacci2)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    loadMipsBinDump("testmips/fibo_2.bin", program);
+
+    cpu.loadProgram(program);
+
+    cpu.setGPR(7,8);
+
+    cpu.stepProgram(9);
+
+    EXPECT_EQ(cpu.gprValue(2), 1);
+    EXPECT_EQ(cpu.gprValue(4), 1);
+    EXPECT_EQ(cpu.gprValue(5), 1);
+    EXPECT_EQ(cpu.gprValue(6), 1);
+    EXPECT_EQ(cpu.gprValue(7), 8);
+    EXPECT_EQ(cpu.hi(), 1);
+    EXPECT_EQ(cpu.lo(), 1);
+
+    cpu.stepProgram();
+
+    EXPECT_EQ(cpu.gprValue(7), 7);
+
+    cpu.runProgram();
+
+    EXPECT_EQ(cpu.gprValue(2), 1);
+    EXPECT_EQ(cpu.gprValue(4), 21);
+    EXPECT_EQ(cpu.gprValue(5), 34);
+    EXPECT_EQ(cpu.gprValue(6), 34);
+    EXPECT_EQ(cpu.gprValue(7), 0);
+    EXPECT_EQ(cpu.hi(), 34);
+    EXPECT_EQ(cpu.lo(), 21);
+}
+
+int fibo(int n)
+{
+    int a = 1, b = 0, c = 0;
+    for ( int i = 0; i < n; ++i )
+    {
+        c = a + b;
+        a = b;
+        b = c;
+    }
+    return c;
+}
+
+TEST(Complex, fibonacci3)
+{
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+    tememu::MipsCPU cpu;
+
+    loadMipsBinDump("testmips/fibo_2.bin", program);
+    cpu.loadProgram(program);
+
+    for ( int i = 1; i < 20; ++i )
+    {
+        cpu.setGPR(7,i); cpu.runProgram();
+        EXPECT_EQ(fibo(i+1), cpu.gprValue(5));
+
+        cpu.reset();
+    }
+ }
+
