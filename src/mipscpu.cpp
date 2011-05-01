@@ -74,6 +74,13 @@ namespace tememu
         REG_OP_FUNC(op_mtlo,    0x13 << 4);
     }
 
+    void MipsCPU::reset()
+    {
+        for ( int i = 0; i < gpr_count; ++i ) _GPR[i] = 0;
+        for ( int i = 0; i < fpr_count; ++i ) _FPR[i] = 0;
+        for ( int i = 0; i < fcr_count; ++i ) _FCR[i] = 0;
+    }
+
     /**
      * @brief Extracts the internal opcode for the function and dispatches the call.
      *
