@@ -117,7 +117,6 @@ namespace tememu
     {
         _PC = _nPC;
         _nPC += offset;
-        std::cout << "----nPC = " << _nPC << "\n";
     }
 
     void MipsCPU::op_add(int32 instr)
@@ -148,7 +147,11 @@ namespace tememu
     void MipsCPU::op_addiu(int32 instr)
     {
         IInstruction i(instr);
-        _GPR[i.rt] = _GPR[i.rs] + i.immediate;
+
+        short svalue;
+        memcpy(&svalue, &(i.immediate), sizeof(svalue));
+
+        _GPR[i.rt] = _GPR[i.rs] + svalue;
         step();
     }
 
@@ -212,7 +215,7 @@ namespace tememu
 
         if (_GPR[i.rs] != _GPR[i.rt])
         {
-            advance_pc(svalue * 4);
+            advance_pc(4 + svalue * 4);
         }
         else
         {
@@ -281,6 +284,17 @@ namespace tememu
 
         while (_nPC / 4 - 1 < p->size())
             runDecodedInstr(p->at(_nPC / 4 - 1));
+    }
+
+    void MipsCPU::stepProgram(int steps)
+    {
+        std::vector<int32>* p = _program.get();
+
+        for (int i = 0; i < steps; ++i)
+        {
+            runDecodedInstr(p->at(_nPC / 4 - 1));
+            if (_nPC / 4 - 1 >= p->size()) break;
+        }
     }
 
 } // tememu

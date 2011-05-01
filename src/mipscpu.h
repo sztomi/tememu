@@ -56,6 +56,7 @@ namespace tememu
 
     public:
         void loadProgram(boost::shared_ptr< std::vector<int32> >);
+        void stepProgram(int numSteps = 1);
         void runProgram();
         int32 gprValue(int index) const { return _GPR[index]; }
         int32 hi() const { return _HI; }

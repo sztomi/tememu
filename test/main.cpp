@@ -374,11 +374,27 @@ TEST(Complex, fibonacci)
 
     cpu.loadProgram(program);
 
+    cpu.stepProgram(9);
+
+    EXPECT_EQ(cpu.gprValue(2), 1);
+    EXPECT_EQ(cpu.gprValue(4), 1);
+    EXPECT_EQ(cpu.gprValue(5), 1);
+    EXPECT_EQ(cpu.gprValue(6), 2);
+    EXPECT_EQ(cpu.gprValue(7), 8);
+    EXPECT_EQ(cpu.hi(), 2);
+    EXPECT_EQ(cpu.lo(), 1);
+
+    cpu.stepProgram();
+
+    EXPECT_EQ(cpu.gprValue(7), 7);
+
     cpu.runProgram();
 
+    EXPECT_EQ(cpu.gprValue(2), 1);
     EXPECT_EQ(cpu.gprValue(4), 21);
     EXPECT_EQ(cpu.gprValue(5), 34);
     EXPECT_EQ(cpu.gprValue(6), 55);
+    EXPECT_EQ(cpu.gprValue(7), 0);
     EXPECT_EQ(cpu.hi(), 55);
     EXPECT_EQ(cpu.lo(), 34);
 }
