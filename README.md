@@ -2,8 +2,18 @@
 
 This project is hardly usable ATM. It is going to be a small&fast MIPS32 emulator at one point. 
 
-I'll pretty this file up later. 
+# Status
 
+Right now, only a handful of instructions are understood by the emulator. 
+I'm aiming for 100% test coverage, so I'm progressing slowly but steadily. 
+
+Right now the master branch is *very* unstable. Once I have a stable version, 
+I'll stop blindly commiting into the master branch and only merge once a feature
+is complete and the overall lib is usable.
+
+First stable version is a version that emulates a MIPS version correctly (probably R2000).
+
+Currently, the greatest program it can run is a fibonacci generator :).
 
 # Building
 
