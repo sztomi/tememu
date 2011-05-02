@@ -474,7 +474,7 @@ TEST(Logical, op_and)
     cpu.setGPR(5, 0xffffffff);
     cpu.setGPR(6, 0xf0000000);
     cpu.runProgram();
-    EXPECT_EQ(cpu.gprValue(7), 0xf000000000);
+    EXPECT_EQ(cpu.gprValue(7), 0xf0000000);
 
     cpu.reset();
 

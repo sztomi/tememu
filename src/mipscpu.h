@@ -101,6 +101,9 @@ namespace tememu
         void op_mflo(int32);
         void op_mthi(int32);
         void op_mtlo(int32);
+
+        // logical instructions
+        void op_and(int32);
     
     private:
         std::vector<int32> _GPR, _FPR, _FCR;
