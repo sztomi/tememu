@@ -268,20 +268,22 @@ namespace tememu
 
     void MipsCPU::runProgram()
     {
-        std::vector<int32>* p = _program.get();
+        size_t psize = _program->size();
 
-        while (_nPC / 4 - 1 < p->size())
-            runDecodedInstr(p->at(_nPC / 4 - 1));
+        if (psize < 1) return;
+
+        while (_nPC / 4 - 1 < psize)
+            runDecodedInstr(_program->at(_nPC / 4 - 1));
     }
 
     void MipsCPU::stepProgram(int steps)
     {
-        std::vector<int32>* p = _program.get();
+        size_t psize = _program->size();
 
         for (int i = 0; i < steps; ++i)
         {
-            runDecodedInstr(p->at(_nPC / 4 - 1));
-            if (_nPC / 4 - 1 >= p->size()) break;
+            runDecodedInstr(_program->at(_nPC / 4 - 1));
+            if (_nPC / 4 - 1 >= psize) break;
         }
     }
 

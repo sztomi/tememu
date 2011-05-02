@@ -466,5 +466,27 @@ TEST(Complex, fibonacci3)
 TEST(Logical, op_and)
 {
     tememu::MipsCPU cpu;
-    
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+
+    program->push_back(0x00a63824); // and $a3, $a1, $a2 
+    cpu.loadProgram(program);
+
+    cpu.setGPR(5, 0xffffffff);
+    cpu.setGPR(6, 0xf0000000);
+    cpu.runProgram();
+    EXPECT_EQ(cpu.gprValue(7), 0xf000000000);
+
+    cpu.reset();
+
+    cpu.setGPR(5, 0x00000000);
+    cpu.setGPR(6, 0x00000000);
+    cpu.runProgram();
+    EXPECT_EQ(cpu.gprValue(7), 0);
+
+    cpu.reset(); 
+
+    cpu.setGPR(5, 0xff00ff00);
+    cpu.setGPR(6, 0x0f0f0f0f);
+    cpu.runProgram();
+    EXPECT_EQ(cpu.gprValue(7), 0x0f000f00);
 }
