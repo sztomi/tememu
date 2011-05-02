@@ -30,7 +30,6 @@
 #include <string>
 
 #include "../src/mipscpu.h"
-#include "../src/instruction.h"
 #include "gtest/gtest.h"
 
 typedef boost::int_fast32_t int32;
@@ -51,146 +50,146 @@ inline void loadMipsBinDump(const std::string& fileName, boost::shared_ptr< std:
 
 TEST(RInstruction, ExtractOpcode1)
 {
-    tememu::RInstruction inst(0xFFFFFFFF);
-    EXPECT_EQ(inst.opcode, 63);
+	int32 inst(0xFFFFFFFF);
+    EXPECT_EQ(OPCODE(inst), 63);
 }
 
 TEST(RInstruction, ExtractRs1)
 {
-    tememu::RInstruction inst(0xFFFFFFFF);
-    EXPECT_EQ(inst.rs, 31);
+	int32 inst(0xFFFFFFFF);
+    EXPECT_EQ(RS(inst), 31);
 }
 
 TEST(RInstruction, ExtractRt1)
 {
-    tememu::RInstruction inst(0xFFFFFFFF);
-    EXPECT_EQ(inst.rt, 31);
+	int32 inst(0xFFFFFFFF);
+    EXPECT_EQ(RT(inst), 31);
 }
 
 TEST(RInstruction, ExtractRd1)
 {
-    tememu::RInstruction inst(0xFFFFFFFF);
-    EXPECT_EQ(inst.rd, 31);
+	int32 inst(0xFFFFFFFF);
+    EXPECT_EQ(RD(inst), 31);
 }
 
 TEST(RInstruction, ExtractShamt1)
 {
-    tememu::RInstruction inst(0xFFFFFFFF);
-    EXPECT_EQ(inst.shamt, 31);
+	int32 inst(0xFFFFFFFF);
+    EXPECT_EQ(SHAMT(inst), 31);
 }
 
 TEST(RInstruction, ExtractFunct1)
 {
-    tememu::RInstruction inst(0xFFFFFFFF);
-    EXPECT_EQ(inst.funct, 63);
+	int32 inst(0xFFFFFFFF);
+    EXPECT_EQ(FUNCT(inst), 63);
 }
 
 TEST(RInstruction, ExtractOpcode2)
 {
-    tememu::RInstruction inst(0x0399e021);
-    EXPECT_EQ(inst.opcode, 0);
+	int32 inst(0x0399e021);
+    EXPECT_EQ(OPCODE(inst), 0);
 }
 
 TEST(RInstruction, ExtractRs2)
 {
-    tememu::RInstruction inst(0x0399e021);
-    EXPECT_EQ(inst.rs, 28);
+	int32 inst(0x0399e021);
+    EXPECT_EQ(RS(inst), 28);
 }
 
 TEST(RInstruction, ExtractRt2)
 {
-    tememu::RInstruction inst(0x0399e021);
-    EXPECT_EQ(inst.rt, 25);
+	int32 inst(0x0399e021);
+    EXPECT_EQ(RT(inst), 25);
 }
 
 TEST(RInstruction, ExtractRd2)
 {
-    tememu::RInstruction inst(0x0399e021);
-    EXPECT_EQ(inst.rd, 28);
+	int32 inst(0x0399e021);
+    EXPECT_EQ(RD(inst), 28);
 }
 
 TEST(RInstruction, ExtractFunct2)
 {
-    tememu::RInstruction inst(0x0399e021);
-    EXPECT_EQ(inst.funct, 0x21);
+	int32 inst(0x0399e021);
+    EXPECT_EQ(FUNCT(inst), 0x21);
 }
 
 TEST(IInstruction, ExtractOpcode1)
 {
-    tememu::IInstruction inst(0xffffffff);
-    EXPECT_EQ(inst.opcode, 63);
+	int32 inst(0xffffffff);
+    EXPECT_EQ(OPCODE(inst), 63);
 }
 
 TEST(IInstruction, ExtractRs1)
 {
-    tememu::IInstruction inst(0xffffffff);
-    EXPECT_EQ(inst.rs, 31);
+	int32 inst(0xffffffff);
+    EXPECT_EQ(RS(inst), 31);
 }
 
 TEST(IInstruction, ExtractRd1)
 {
-    tememu::IInstruction inst(0xffffffff);
-    EXPECT_EQ(inst.rt, 31);
+	int32 inst(0xffffffff);
+    EXPECT_EQ(RT(inst), 31);
 }
 
 TEST(IInstruction, ExtractImmediate1)
 {
-    tememu::IInstruction inst(0xffffffff);
-    EXPECT_EQ(inst.immediate, 0xffff);
+	int32 inst(0xffffffff);
+    EXPECT_EQ(IMMEDIATE(inst), 0xffff);
 }
 
 TEST(IInstruction, ExtractOpcode2)
 {
-    tememu::IInstruction inst(0x24625bfa);
-    EXPECT_EQ(inst.opcode, 0x9);
+	int32 inst(0x24625bfa);
+    EXPECT_EQ(OPCODE(inst), 0x9);
 }
 
 TEST(IInstruction, ExtractRs2)
 {
-    tememu::IInstruction inst(0x24625bfa);
-    EXPECT_EQ(inst.rs, 3);
+	int32 inst(0x24625bfa);
+    EXPECT_EQ(RS(inst), 3);
 }
 
 TEST(IInstruction, ExtractRd2)
 {
-    tememu::IInstruction inst(0x24625bfa);
-    EXPECT_EQ(inst.rt, 2);
+	int32 inst(0x24625bfa);
+    EXPECT_EQ(RT(inst), 2);
 }
 
 TEST(IInstruction, ExtractImmediate2)
 {
-    tememu::IInstruction inst(0x24625bfa);
-    EXPECT_EQ(inst.immediate, 23546);
+	int32 inst(0x24625bfa);
+    EXPECT_EQ(IMMEDIATE(inst), 23546);
 }
 
 TEST(JInstruction, ExtractOpcode1)
 {
-    tememu::JInstruction inst(0xffffffff);
-    EXPECT_EQ(inst.opcode, 63);
+	int32 inst(0xffffffff);
+    EXPECT_EQ(OPCODE(inst), 63);
 }
 
 TEST(JInstruction, ExtractAddress1)
 {
-    tememu::JInstruction inst(0xffffffff);
-    EXPECT_EQ(inst.address, 67108863 << 2);
+	int32 inst(0xffffffff);
+    EXPECT_EQ(ADDRESS(inst), 67108863 << 2);
 }
 
 TEST(JInstruction, ExtractOpcode2)
 {
-    tememu::JInstruction inst(0x08100002);
-    EXPECT_EQ(inst.opcode, 2);
+	int32 inst(0x08100002);
+    EXPECT_EQ(OPCODE(inst), 2);
 }
 
 TEST(JInstruction, ExtractAddress2)
 {
-    tememu::JInstruction inst(0x08100002);
-    EXPECT_EQ(inst.address, 0x00400008);
+	int32 inst(0x08100002);
+    EXPECT_EQ(ADDRESS(inst), 0x00400008);
 }
 
 TEST(JInstruction, ExtractAddress3)
 {
-    tememu::JInstruction inst(0x08100006);
-    EXPECT_EQ(inst.address, 0x00400018);
+	int32 inst(0x08100006);
+    EXPECT_EQ(ADDRESS(inst), 0x00400018);
 }
 
 TEST(SimpleProgs, Addi1)
@@ -464,3 +463,8 @@ TEST(Complex, fibonacci3)
     }
  }
 
+TEST(Logical, op_and)
+{
+    tememu::MipsCPU cpu;
+    
+}

@@ -23,7 +23,6 @@
  */
  
 #include "consts.h"
-#include "instruction.h"
 #include "mipscpu.h"
 
 #include <cstring>
