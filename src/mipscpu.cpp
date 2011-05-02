@@ -131,84 +131,72 @@ namespace tememu
 
     void MipsCPU::op_add(int32 instr)
     {
-        RInstruction i(instr);
-        _GPR[i.rd] = _GPR[i.rs] + _GPR[i.rt];
+        _GPR[RD(instr)] = _GPR[RS(instr)] + _GPR[RT(instr)];
         step();
     }
 
     void MipsCPU::op_addu(int32 instr)
     {
-        RInstruction i(instr);
-        _GPR[i.rd] = _GPR[i.rs] + _GPR[i.rt];
+        _GPR[RD(instr)] = _GPR[RS(instr)] + _GPR[RT(instr)];
         step();
     }
 
     void MipsCPU::op_addi(int32 instr)
     {
-        IInstruction i(instr);
-        
-        short svalue;
-        memcpy(&svalue, &(i.immediate), sizeof(svalue));
+        int_short conv;
+        conv.i = instr;
 
-        _GPR[i.rt] = _GPR[i.rs] + svalue;
+        _GPR[RT(instr)] = _GPR[RS(instr)] + conv.s;
         step();
     }
 
     void MipsCPU::op_addiu(int32 instr)
     {
-        IInstruction i(instr);
+        int_short conv;
+        conv.i = instr;
 
-        short svalue;
-        memcpy(&svalue, &(i.immediate), sizeof(svalue));
-
-        _GPR[i.rt] = _GPR[i.rs] + svalue;
+        _GPR[RT(instr)] = _GPR[RS(instr)] + conv.s;
         step();
     }
 
     void MipsCPU::op_sub(int32 instr)
     {
-        RInstruction i(instr);
-        _GPR[i.rd] = _GPR[i.rs] - _GPR[i.rt];
+        _GPR[RD(instr)] = _GPR[RS(instr)] - _GPR[RT(instr)];
         step();
     }
 
     void MipsCPU::op_subu(int32 instr)
     {
-        RInstruction i(instr);
-        _GPR[i.rd] = (boost::uint32_t)(_GPR[i.rs]) - (boost::uint32_t)(_GPR[i.rt]);
+        _GPR[RD(instr)] = (boost::uint32_t)(_GPR[RS(instr)]) - (boost::uint32_t)(_GPR[RT(instr)]);
         step();
     }
 
     void MipsCPU::op_mult(int32 instr)
     {
-        RInstruction i(instr);
-        _LO = ((_GPR[i.rt] * _GPR[i.rs]) << 16) >> 16;
-        _HI = (_GPR[i.rt] * _GPR[i.rs]) << 16;
+        _LO = ((_GPR[RT(instr)] * _GPR[RS(instr)]) << 16) >> 16;
+        _HI = (_GPR[RT(instr)] * _GPR[RS(instr)]) << 16;
         step();
     }
 
     void MipsCPU::op_div(int32 instr)
     {
-        RInstruction i(instr);
-        _LO = _GPR[i.rs] / _GPR[i.rt];
-        _HI = _GPR[i.rs] % _GPR[i.rt];
+        _LO = _GPR[RS(instr)] / _GPR[RT(instr)];
+        _HI = _GPR[RS(instr)] % _GPR[RT(instr)];
         step();
     }
 
     void MipsCPU::op_divu(int32 instr)
     {
-        RInstruction i(instr);
-        _LO = _GPR[i.rs] / _GPR[i.rt];
-        _HI = _GPR[i.rs] % _GPR[i.rt];
+        _LO = _GPR[RS(instr)] / _GPR[RT(instr)];
+        _HI = _GPR[RS(instr)] % _GPR[RT(instr)];
         step();
     }
 
     void MipsCPU::op_beq(int32 instr)
     {
-        IInstruction i(instr);
-        if (_GPR[i.rs] == _GPR[i.rt])
+        if (_GPR[RS(instr)] == _GPR[RT(instr)])
         {
-            advance_pc(4 + 4 * i.immediate);
+            advance_pc(4 + 4 * IMMEDIATE(instr));
         }
         else
         {
@@ -218,14 +206,12 @@ namespace tememu
 
     void MipsCPU::op_bne(int32 instr)
     {
-        IInstruction i(instr);
+        int_short conv;
+        conv.i = instr;
 
-        short svalue;
-        memcpy(&svalue, &(i.immediate), sizeof(svalue));
-
-        if (_GPR[i.rs] != _GPR[i.rt])
+        if (_GPR[RS(instr)] != _GPR[RT(instr)])
         {
-            advance_pc(4 + svalue * 4);
+            advance_pc(4 + conv.s * 4);
         }
         else
         {
@@ -235,51 +221,44 @@ namespace tememu
 
     void MipsCPU::op_j(int32 instr)
     {
-        JInstruction i(instr);
         _PC = _nPC;
-        _nPC = (_PC & 0xf0000000) | i.address + 4;
+        _nPC = (_PC & 0xf0000000) | ADDRESS(instr) + 4;
     }
 
     void MipsCPU::op_jal(int32 instr)
     {
-        JInstruction i(instr);
         _GPR[31] = _PC + 4; // return address is the next instruction from here
         _PC = _nPC;
-        _nPC = (_PC & 0xf0000000) | i.address + 4;
+        _nPC = (_PC & 0xf0000000) | ADDRESS(instr) + 4;
     }
 
     void MipsCPU::op_jr(int32 instr)
     {
-        RInstruction i(instr);
         _PC = _nPC;
-        _nPC = _GPR[i.rs] + 4;
+        _nPC = _GPR[RS(instr)] + 4;
     }
 
     void MipsCPU::op_mfhi(int32 instr)
     {
-        RInstruction i(instr);
-        _GPR[i.rd] = _HI;
+        _GPR[RD(instr)] = _HI;
         step();
     }
 
     void MipsCPU::op_mflo(int32 instr)
     {
-        RInstruction i(instr);
-        _GPR[i.rd] = _LO;
+        _GPR[RD(instr)] = _LO;
         step();
     }
 
     void MipsCPU::op_mthi(int32 instr)
     {
-        RInstruction i(instr);
-        _HI = _GPR[i.rs];
+        _HI = _GPR[RS(instr)];
         step();
     }
 
     void MipsCPU::op_mtlo(int32 instr)
     {
-        RInstruction i(instr);
-        _LO = _GPR[i.rs];
+        _LO = _GPR[RS(instr)];
         step();
     }
 

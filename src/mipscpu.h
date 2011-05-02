@@ -35,9 +35,22 @@
 
 #define CALL_MEMBER(obj,fn) ((obj)->*(fn))
 
+#define OPCODE(i) ((i & 0xFC000000) >> 26)    // extract bits 0..5
+#define RS(i) ((i & 0x03E00000) >> 21)        // extract bits 6..10
+#define RT(i) ((i & 0x001F0000) >> 16)        // extract bits 11..15
+#define RD(i) ((i & 0x0000F800) >> 11)        // extract bits 16..20
+#define SHAMT(i) ((i & 0x000001F0) >> 4)     // extract bits 21..25
+#define FUNCT(i) (i & 0x0000003F)            // extract bits 26..31
+#define IMMEDIATE(i) (i & 0x0000FFFF) // extract bits 16..31
+#define ADDRESS(i) ((i & 0x03ffffff) << 2) // extract bits 6..31
+
 namespace tememu 
 {
     typedef boost::int_fast32_t int32;
+
+    union int_short { short s; int32 i; };
+
+
     /**
      * @brief Maintains the state of the MIPS CPU
      */
