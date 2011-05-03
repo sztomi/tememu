@@ -74,6 +74,7 @@ namespace tememu
         REG_OP_FUNC(op_mtlo,    0x13 << 4);
 
         REG_OP_FUNC(op_and,     0x24 << 4);
+        REG_OP_FUNC(op_andi,    0x0C);
     }
 
     void MipsCPU::reset()
@@ -266,6 +267,12 @@ namespace tememu
     void MipsCPU::op_and(int32 instr)
     {
         _GPR[RD(instr)] = _GPR[RS(instr)] & _GPR[RT(instr)];
+        step();
+    }
+
+    void MipsCPU::op_andi(int32 instr)
+    {
+        _GPR[RT(instr)] = _GPR[RS(instr)] & IMMEDIATE(instr);
         step();
     }
 
