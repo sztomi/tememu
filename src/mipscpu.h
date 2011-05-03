@@ -107,6 +107,7 @@ namespace tememu
         void op_andi(int32);
         void op_or(int32);
         void op_ori(int32);
+        void op_xor(int32);
     
     private:
         std::vector<int32> _GPR, _FPR, _FCR;
