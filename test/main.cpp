@@ -543,3 +543,28 @@ TEST(Logical, op_or)
     cpu.runProgram();
     EXPECT_EQ(cpu.gprValue(7), 0xfff0fff0);
 }
+
+TEST(Logical, op_ori)
+{
+    tememu::MipsCPU cpu;
+    boost::shared_ptr< std::vector<int32> > program(new std::vector<int32>);
+
+    program->push_back(0x34a7ffff); // ori $a3, $a1, 65535 
+    cpu.loadProgram(program);
+
+    cpu.setGPR(5, 0xffffffff);
+    cpu.runProgram();
+    EXPECT_EQ(cpu.gprValue(7), 0xffffffff);
+
+    cpu.reset();
+
+    cpu.setGPR(5, 0x00000000);
+    cpu.runProgram();
+    EXPECT_EQ(cpu.gprValue(7), 0x0000ffff);
+
+    cpu.reset(); 
+
+    cpu.setGPR(5, 0xff00ff00);
+    cpu.runProgram();
+    EXPECT_EQ(cpu.gprValue(7), 0xff00ffff);
+}
